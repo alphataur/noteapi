@@ -3,6 +3,10 @@ const fs = require("fs")
 const path = require("path")
 const crypto = require("crypto")
 
+function ensureFileStructure(){
+  cp.execSync("mkdir -p sandbox/python sandbox/node")
+}
+
 function execFile(target, fpath){
   return new Promise((resolve, reject)=>{
     const handle = cp.spawn(target, [fpath])
@@ -45,10 +49,11 @@ async function pyExec(commands){
   let fpath = flushContents(commands, {language: "python"})
   let target = "python"
   try{
-    console.log(await execFile(target, fpath))
+    return await execFile(target, fpath)
   }
   catch(e){
     fs.unlinkSync(fpath)
+    return false
   }
 }
 
@@ -56,10 +61,11 @@ async function jsExec(commands){
   let fpath = flushContents(commands, {language: "javascript"})
   let target = "node"
   try{
-    console.log(await execFile(target, fpath))
+    return await execFile(target, fpath)
   }
   catch(e){
     fs.unlinkSync(fpath)
+    return false
   }
 }
 
@@ -80,5 +86,6 @@ console.log(a.last())
 
 module.exports = {
   jsExec: jsExec,
-  pyExec: pyExec
+  pyExec: pyExec,
+  ensureFileStructure: ensureFileStructure
 }
