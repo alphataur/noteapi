@@ -30,7 +30,7 @@ function hashContents(commands){
 }
 
 function flushContents(commands, options){
-  var fpath; //seriously whats wrong with me!
+  let fpath; //seriously whats wrong with me!
   switch(options.language){
     case "python":
       fpath = path.join(__dirname, "sandbox", "python", hashContents(commands)+".py")
